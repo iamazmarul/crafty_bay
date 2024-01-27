@@ -1,5 +1,7 @@
+import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key, this.category});
@@ -18,7 +20,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         elevation: 3,
         leading: IconButton(
           onPressed: () {
-            // Get.find<MainBottomNavController>().backToHome();
+            Get.find<MainBottomNavController>().backToHome();
           },
           icon: const Icon(
             Icons.arrow_back_ios,

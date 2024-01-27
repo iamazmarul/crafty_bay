@@ -80,7 +80,6 @@ class _CartProductItemState extends State<CartProductItem> {
                     ValueListenableBuilder(
                         valueListenable: noOfItems,
                         builder: (context, value, _) {
-                          /// TODO - Design a item counter
                           return ItemCount(
                             initialValue: value,
                             minValue: 1,
