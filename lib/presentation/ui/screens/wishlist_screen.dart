@@ -3,14 +3,14 @@ import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class WishlistScreen extends StatefulWidget {
-  const WishlistScreen({super.key});
+class WishListScreen extends StatefulWidget {
+  const WishListScreen({super.key});
 
   @override
-  State<WishlistScreen> createState() => _WishlistScreenState();
+  State<WishListScreen> createState() => _WishListScreenState();
 }
 
-class _WishlistScreenState extends State<WishlistScreen> {
+class _WishListScreenState extends State<WishListScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -44,7 +44,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 crossAxisSpacing: 4
             ),
             itemBuilder: (context, index) {
-              return const FittedBox(child: ProductCardItem());
+              // return const FittedBox(child: ProductCardItem());
             },
           ),
         ),

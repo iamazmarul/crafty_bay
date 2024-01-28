@@ -1,4 +1,6 @@
+import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/verify_email_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,10 +9,11 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreensState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreensState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -18,8 +21,14 @@ class _SplashScreensState extends State<SplashScreen> {
   }
 
   void moveToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 2));
-    Get.offAll(const VerifyEmailScreen());
+    await Future.delayed(const Duration(seconds: 1),);
+    // final bool isLoggedIn = await Get.find<AuthController>().isLoggedIn();
+    // if (isLoggedIn) {
+    Get.offAll(const MainBottomNavScreen());
+    // } else {
+    //   Get.offAll(const VerifyEmailScreen());
+    // }
+
   }
 
   @override
@@ -32,13 +41,9 @@ class _SplashScreensState extends State<SplashScreen> {
             AppLogo(),
             Spacer(),
             CircularProgressIndicator(),
-            SizedBox(
-              height: 16,
-            ),
-            Text("Version 1.0"),
-            SizedBox(
-              height: 16,
-            ),
+            SizedBox(height: 16,),
+            Text('Version 1.0'),
+            SizedBox(height: 16,),
           ],
         ),
       ),
