@@ -1,34 +1,36 @@
-import 'package:crafty_bay/data/models/product_list_model.dart';
+import 'package:crafty_bay/data/models/network_response.dart';
+import 'package:crafty_bay/data/models/product_model.dart';
 import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:get/get.dart';
 
 class PopularProductController extends GetxController {
-  bool _inProgress = false;
-
-  bool get inProgress => _inProgress;
-
+  bool _getPopularProductsInProgress = false;
+  ProductModel _popularProductModel = ProductModel();
   String _errorMessage = '';
+
+  bool get getPopularProductsInProgress => _getPopularProductsInProgress;
+
+  ProductModel get popularProductModel => _popularProductModel;
 
   String get errorMessage => _errorMessage;
 
-  ProductListModel _productListModel = ProductListModel();
-
-  ProductListModel get productListModel => _productListModel;
-
-  Future<bool> getPopularProductList() async {
-    bool isSuccess = false;
-    _inProgress = true;
+  Future<bool> getPopularProducts() async {
+    _getPopularProductsInProgress = true;
     update();
-    final response = await NetworkCaller().getRequest(Urls.popularProduct);
-    _inProgress = false;
+    // final NetworkResponse response =
+    // await NetworkCaller().getRequest(Urls.getProductsByRemarks('popular'));
+    final NetworkResponse response =
+    await NetworkCaller().getRequest(Urls.getPopularProducts);
+    _getPopularProductsInProgress = false;
     if (response.isSuccess) {
-      _productListModel = ProductListModel.fromJson(response.responseData);
-      isSuccess = true;
+      _popularProductModel = ProductModel.fromJson(response.responseJson ?? {});
+      update();
+      return true;
     } else {
-      _errorMessage = response.errorMessage;
+      _errorMessage = 'Popular product fetch failed! Try again.';
+      update();
+      return false;
     }
-    update();
-    return isSuccess;
   }
 }

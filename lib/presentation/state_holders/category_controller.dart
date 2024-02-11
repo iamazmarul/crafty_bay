@@ -1,35 +1,34 @@
-import 'package:crafty_bay/data/models/category_list_model.dart';
+import 'package:crafty_bay/data/models/category_model.dart';
+import 'package:crafty_bay/data/models/network_response.dart';
 import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:get/get.dart';
 
 class CategoryController extends GetxController {
-  bool _inProgress = false;
+  bool _getCategoriesInProgress = false;
+  CategoryModel _categoryModel = CategoryModel();
+  String _message = '';
 
-  bool get inProgress => _inProgress;
+  CategoryModel get categoryModel => _categoryModel;
 
-  String _errorMessage = '';
+  bool get getCategoriesInProgress => _getCategoriesInProgress;
 
-  String get errorMessage => _errorMessage;
+  String get message => _message;
 
-  CategoryListModel _categoryListModel = CategoryListModel();
-
-  CategoryListModel get categoryListModel => _categoryListModel;
-
-  Future<bool> getCategoryList() async {
-    bool isSuccess = false;
-    _inProgress = true;
+  Future<bool> getCategories() async {
+    _getCategoriesInProgress = true;
     update();
-    final response= await NetworkCaller()
-        .getRequest(Urls.categoryList);
-    _inProgress = false;
+    final NetworkResponse response =
+        await NetworkCaller().getRequest(Urls.getCategories);
+    _getCategoriesInProgress = false;
     if (response.isSuccess) {
-      _categoryListModel = CategoryListModel.fromJson(response.responseData);
-      isSuccess = true;
+      _categoryModel = CategoryModel.fromJson(response.responseJson ?? {});
+      update();
+      return true;
     } else {
-      _errorMessage = response.errorMessage;
+      _message = 'Category list data fetch failed!';
+      update();
+      return false;
     }
-    update();
-    return isSuccess;
   }
 }

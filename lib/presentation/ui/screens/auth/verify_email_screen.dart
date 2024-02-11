@@ -1,100 +1,87 @@
-import 'package:crafty_bay/presentation/state_holders/send_email_otp_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/auth/email_verification_screen_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/verify_otp_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class VerifyEmailScreen extends StatefulWidget {
-  const VerifyEmailScreen({super.key});
+class EmailVerificationScreen extends StatelessWidget {
+  EmailVerificationScreen({Key? key}) : super(key: key);
 
-  @override
-  State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
-}
-
-class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   final TextEditingController _emailTEController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
                 const SizedBox(
-                  height: 160,
-                ),
-                const AppLogo(
                   height: 80,
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Text(
-                  'Welcome back',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  'Please enter your email address',
-                  style: Theme.of(context).textTheme.bodySmall,
+                const Center(
+                  child: CraftyBayLogo(),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
+                Text(
+                  'Welcome back',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 24,
+                      ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text('Please enter your email address',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: Colors.grey)),
+                const SizedBox(
+                  height: 24,
+                ),
                 TextFormField(
                   controller: _emailTEController,
-                  decoration: const InputDecoration(hintText: 'Email'),
-                  validator: (value) {
-                    if (value?.trim().isEmpty ?? true) {
-                      return 'Enter your email';
+                  decoration: const InputDecoration(
+                      hintText: 'Email', labelText: 'Email'),
+                  validator: (String? text) {
+                    if (text?.isEmpty ?? true) {
+                      return 'Enter your email address';
+                    } else if (text!.isEmail == false) {
+                      /// REGEX (Email validator)
+                      return 'Enter a valid email address';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 16,
                 ),
-                GetBuilder<SendEmailOtpController>(
-                    builder: (controller) {
-                      return SizedBox(
-                        width: double.infinity,
-                        child: Visibility(
-                          visible: controller.inProgress == false,
-                          replacement: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final bool result = await controller.sendOtpToEmail(_emailTEController.text.trim());
-                                if (result) {
-                                  Get.to(
-                                        () => VerifyOTPScreen(
-                                      email: _emailTEController.text.trim(),
-                                    ),
-                                  );
-                                } else {
-                                  Get.showSnackbar(GetSnackBar(
-                                    title: 'Send OTP failed',
-                                    message: controller.errorMessage,
-                                    duration: const Duration(seconds: 2),
-                                    isDismissible: true,
-                                  ));
-                                }
-                              }
-                            },
-                            child: const Text('Next'),
-                          ),
-                        ),
+                SizedBox(
+                  width: double.infinity,
+                  child: GetBuilder<EmailVerificationScreenController>(
+                      builder: (controller) {
+                    if (controller.emailVerificationInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
                     }
+                    return ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          verifyEmail(controller);
+                        }
+                      },
+                      child: const Text('Next'),
+                    );
+                  }),
                 ),
               ],
             ),
@@ -102,5 +89,21 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> verifyEmail(EmailVerificationScreenController controller) async {
+    final response =
+        await controller.verifyEmail(_emailTEController.text.trim());
+    if (response) {
+      Get.to(() => OTPVerificationScreen(email: _emailTEController.text.trim()));
+    } else {
+      Get.snackbar(
+        'Failed',
+        'Email verification failed! Try again',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        borderRadius: 10,
+      );
+    }
   }
 }

@@ -1,45 +1,50 @@
-import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/auth/auth_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
-    moveToNextScreen();
+    goToNextScreen();
   }
 
-  void moveToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 1),);
-    await Get.find<AuthController>().initialize();
-    Get.offAll(const MainBottomNavScreen());
+  Future<void> goToNextScreen() async {
+    await AuthController.getAccessToken();
+    Future.delayed(const Duration(seconds: 2)).then((value) {
+      Get.offAll(() => const MainBottomNavScreen());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Spacer(),
-            AppLogo(),
-            Spacer(),
-            CircularProgressIndicator(),
-            SizedBox(height: 16,),
-            Text('Version 1.0'),
-            SizedBox(height: 16,),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Spacer(),
+          Center(
+            child: CraftyBayLogo(),
+          ),
+          Spacer(),
+          CircularProgressIndicator(),
+          SizedBox(
+            height: 16,
+          ),
+          Text('Version 1.0.0'),
+          SizedBox(
+            height: 16,
+          ),
+        ],
       ),
     );
   }

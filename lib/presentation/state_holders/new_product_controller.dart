@@ -1,34 +1,35 @@
-import 'package:crafty_bay/data/models/product_list_model.dart';
+import 'package:crafty_bay/data/models/network_response.dart';
+import 'package:crafty_bay/data/models/product_model.dart';
 import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:get/get.dart';
 
 class NewProductController extends GetxController {
-  bool _inProgress = false;
-
-  bool get inProgress => _inProgress;
-
+  bool _getNewProductsInProgress = false;
+  ProductModel _newProductModel = ProductModel();
   String _errorMessage = '';
+
+  bool get getNewProductsInProgress => _getNewProductsInProgress;
+
+  ProductModel get newProductModel => _newProductModel;
 
   String get errorMessage => _errorMessage;
 
-  ProductListModel _productListModel = ProductListModel();
-
-  ProductListModel get productListModel => _productListModel;
-
-  Future<bool> getNewProductList() async {
-    bool isSuccess = false;
-    _inProgress = true;
+  Future<bool> getNewProducts() async {
+    _getNewProductsInProgress = true;
     update();
-    final response = await NetworkCaller().getRequest(Urls.newProduct);
-    _inProgress = false;
+    final NetworkResponse response =
+    await NetworkCaller().getRequest(Urls.getNewProducts);
+    _getNewProductsInProgress = false;
     if (response.isSuccess) {
-      _productListModel = ProductListModel.fromJson(response.responseData);
-      isSuccess = true;
+      _newProductModel =
+          ProductModel.fromJson(response.responseJson ?? {});
+      update();
+      return true;
     } else {
-      _errorMessage = response.errorMessage;
+      _errorMessage = 'New product fetch failed! Try again.';
+      update();
+      return false;
     }
-    update();
-    return isSuccess;
   }
 }

@@ -1,6 +1,5 @@
-class AssetsPath{
-  static const String imagePath = "assets/images";
-  static const logo = "$imagePath/logo.png";
-  static const navBarLogo = "$imagePath/logo_nav.png";
-  static const demoProduct = "$imagePath/shoe.jpg";
+class AssetsPath {
+  AssetsPath._();
+  static String craftyBayLogoSVG = 'assets/images/logo.svg';
+  static const String craftyBayNavLogoSVG = 'assets/images/logo_nav.svg';
 }

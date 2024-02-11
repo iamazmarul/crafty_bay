@@ -1,37 +1,39 @@
+import 'dart:developer';
+
+import 'package:crafty_bay/data/models/network_response.dart';
 import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:get/get.dart';
 
 class AddToCartController extends GetxController {
-  bool _inProgress = false;
+  bool _addToCartInProgress = false;
+  String _message = '';
 
-  String _errorMessage = '';
+  bool get addToCartInProgress => _addToCartInProgress;
 
-  bool get inProgress => _inProgress;
+  String get message => _message;
 
-  String get errorMessage => _errorMessage;
-
-  Future<bool> addToCart(int productId, String color, String size, int quantity) async {
-    bool isSuccess = false;
-    _inProgress = true;
+  Future<bool> addToCart(
+      int productId, String color, String size, int quantity) async {
+    _addToCartInProgress = true;
     update();
-    Map<String, dynamic> inputParams = {
+    final NetworkResponse response = await NetworkCaller().postRequest(
+        Urls.addToCart, {
       "product_id": productId,
       "color": color,
       "size": size,
-      "qty": quantity,
-    };
-    final response = await NetworkCaller().postRequest(
-      Urls.addToCart,
-      body: inputParams,
-    );
-    if (response.isSuccess) {
-      isSuccess = true;
-    } else {
-      _errorMessage = response.errorMessage;
-    }
-    _inProgress = false;
+      "qty": quantity
+    });
+    log(productId.toString());
+    log('color: $color');
+    log('Size: $size');
+    _addToCartInProgress = false;
     update();
-    return isSuccess;
+    if (response.isSuccess) {
+      return true;
+    } else {
+      _message = 'Add to cart failed! Try again';
+      return false;
+    }
   }
 }

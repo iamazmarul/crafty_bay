@@ -2,22 +2,35 @@ import 'package:flutter/material.dart';
 
 class SectionTitle extends StatelessWidget {
   const SectionTitle({
-    super.key, required this.title, required this.onTapSeeAll,
+    super.key, required this.title, this.icon,
   });
-
   final String title;
-  final VoidCallback onTapSeeAll;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600
-        ),),
-        TextButton(onPressed: onTapSeeAll, child: const Text('See All'))
+        if (icon != null)
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: CircleAvatar(
+              radius: 14,
+              backgroundColor: Colors.grey.shade200,
+              child: Icon(
+                icon,
+                color: Colors.grey,
+                size: 20,
+              ),
+            ),
+          ),
+        Text(
+          title,
+          style: TextStyle(
+              fontSize: 16,
+              color: Colors.black.withOpacity(0.7),
+              fontWeight: FontWeight.w700),
+        ),
       ],
     );
   }

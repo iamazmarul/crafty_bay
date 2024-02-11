@@ -1,67 +1,56 @@
-import 'package:crafty_bay/presentation/state_holders/product_controller.dart';
-import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
-import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
+import 'package:crafty_bay/data/models/product_model.dart';
+import 'package:crafty_bay/presentation/ui/screens/product_details_screen.dart';
+import 'package:crafty_bay/presentation/ui/widgets/product_card.dart';
+import 'package:crafty_bay/presentation/ui/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductListScreen extends StatefulWidget {
-  const ProductListScreen({super.key, this.category, this.categoryId});
+class ProductListScreen extends StatelessWidget {
+  final List<ProductData> productData;
+  final String remarkName;
 
-  final String? category;
-  final int? categoryId;
-
-  @override
-  State<ProductListScreen> createState() => _ProductListScreenState();
-}
-
-class _ProductListScreenState extends State<ProductListScreen> {
-  @override
-  void initState() {
-    super.initState();
-    if (widget.categoryId != null) {
-      Get.find<ProductController>()
-          .getProductList(categoryId: widget.categoryId!);
-    }
-  }
+  const ProductListScreen(
+      {super.key, required this.productData, required this.remarkName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.category ?? 'Products'),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(
+          title: remarkName,
+          elevation: 1,
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: GetBuilder<ProductController>(builder: (productController) {
-          return Visibility(
-            visible: productController.inProgress == false,
-            replacement: const CenterCircularProgressIndicator(),
-            child: Visibility(
-              visible: productController.productListModel.productList?.isNotEmpty ?? false,
-              replacement: const Center(
-                child: Text('No products'),
-              ),
+      body: productData.isEmpty
+          ? const Center(
+              child: Text('No data available!'),
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.builder(
-                itemCount:
-                productController.productListModel.productList?.length ?? 0,
+                itemCount: productData.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.90,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 4),
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
                 itemBuilder: (context, index) {
-                  return FittedBox(
-                    child: ProductCardItem(
-                      product:
-                      productController.productListModel.productList![index],
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => ProductDetailsScreen(
+                            productId: productData[index].id!,
+                          ));
+                    },
+                    child: FittedBox(
+                      child: ProductCard(
+                        productData: productData[index],
+                      ),
                     ),
                   );
                 },
               ),
             ),
-          );
-        }),
-      ),
     );
   }
 }

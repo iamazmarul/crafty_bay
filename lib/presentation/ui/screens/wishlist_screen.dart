@@ -1,5 +1,8 @@
-import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_controller.dart';
-import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
+import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_screen_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/wishlist_screen_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/product_details_screen.dart';
+import 'package:crafty_bay/presentation/ui/widgets/custom_appbar.dart';
+import 'package:crafty_bay/presentation/ui/widgets/wishlist_product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,42 +15,71 @@ class WishListScreen extends StatefulWidget {
 
 class _WishListScreenState extends State<WishListScreen> {
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await Get.find<WishListScreenController>().getWishlistProducts();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (value) {
-        Get.find<MainBottomNavController>().backToHome();
+    return WillPopScope(
+      onWillPop: () async {
+        Get.find<MainBottomNavScreenController>().backToHome();
+        return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Get.find<MainBottomNavController>().backToHome();
-            },
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: CustomAppBar(
+            title: 'WishList',
+            elevation: 1,
           ),
-          title: const Text(
-            'Wishlist',
-            style: TextStyle(fontSize: 18),
-          ),
-          elevation: 3,
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: GridView.builder(
-            itemCount: 100,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        body: GetBuilder<WishListScreenController>(
+            builder: (wishListScreenController) {
+          if (wishListScreenController.getWishListProductsInProgress) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (wishListScreenController.wishListProductModel.data != null &&
+              wishListScreenController.wishListProductModel.data!.isEmpty) {
+            return const Center(
+              child: Text('WishList is empty!'),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: GridView.builder(
+              itemCount:
+                  wishListScreenController.wishListProductModel.data?.length ??
+                      0,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                childAspectRatio: 0.90,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 4
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => ProductDetailsScreen(
+                          productId: wishListScreenController
+                              .wishListProductModel.data![index].productId!,
+                        ));
+                  },
+                  child: FittedBox(
+                    child: WishListProductCard(
+                      productData: wishListScreenController
+                          .wishListProductModel.data![index],
+                    ),
+                  ),
+                );
+              },
             ),
-            itemBuilder: (context, index) {
-              // return const FittedBox(child: ProductCardItem());
-            },
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
