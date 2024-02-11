@@ -1,6 +1,7 @@
 import 'package:crafty_bay/data/models/brand_model.dart';
 import 'package:crafty_bay/data/models/category_list_item..dart';
 
+
 class ProductModel {
   int? id;
   String? title;
@@ -10,7 +11,7 @@ class ProductModel {
   String? discountPrice;
   String? image;
   int? stock;
-  double? star;
+  int? star;
   String? remark;
   int? categoryId;
   int? brandId;
