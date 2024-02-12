@@ -111,7 +111,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       'Update your profile & please write your current information.',
                       style: Theme.of(context)
                           .textTheme
-                          .titleMedium
+                          .bodySmall
                           ?.copyWith(color: Colors.grey)),
                   const SizedBox(
                     height: 40,

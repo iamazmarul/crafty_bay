@@ -58,17 +58,6 @@ class HomeSlider extends StatelessWidget {
                               fit: BoxFit.fitHeight,
                               height: 90,
                             ),
-                            Positioned(
-                              left: 35,
-                              top: 10,
-                              child: SizedBox(
-                                height: 70,
-                                child: Image.asset(
-                                  'assets/images/hot_selling.png',
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -86,8 +75,8 @@ class HomeSlider extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 50,
-                        width: double.infinity,
+                        height: 55,
+                        width: 100,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
@@ -103,7 +92,9 @@ class HomeSlider extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 10, fontWeight: FontWeight.bold),
                               ),
-                              onPressed: () {}),
+                              onPressed: () {
+
+                              }),
                         ),
                       )
                     ],

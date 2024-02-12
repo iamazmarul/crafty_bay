@@ -61,6 +61,11 @@ class _HomeScreenAppbarTitleState extends State<HomeScreenAppbarTitle> {
         const SizedBox(
           width: 8,
         ),
+        CircularIconButton(
+          icon: Icons.call,
+          onTap: () {
+          },
+        ),
         const SizedBox(
           width: 8,
         ),

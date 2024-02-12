@@ -22,7 +22,7 @@ class EmailVerificationScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 80,
+                  height: 120,
                 ),
                 const Center(
                   child: CraftyBayLogo(),
@@ -42,7 +42,7 @@ class EmailVerificationScreen extends StatelessWidget {
                 Text('Please enter your email address',
                     style: Theme.of(context)
                         .textTheme
-                        .titleMedium
+                        .bodySmall
                         ?.copyWith(color: Colors.grey)),
                 const SizedBox(
                   height: 24,

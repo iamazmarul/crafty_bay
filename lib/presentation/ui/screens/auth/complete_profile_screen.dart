@@ -57,14 +57,14 @@ class CreateProfileScreen extends StatelessWidget {
                   Text('Get started with us by share your details',
                       style: Theme.of(context)
                           .textTheme
-                          .titleMedium
+                          .bodySmall
                           ?.copyWith(color: Colors.grey)),
                   const SizedBox(
                     height: 40,
                   ),
                   Text(
                     'User Details',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 20,
                         ),
                   ),
@@ -221,7 +221,7 @@ class CreateProfileScreen extends StatelessWidget {
                   ),
                   Text(
                     'Shipping Details',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 20,
                         ),
                   ),
