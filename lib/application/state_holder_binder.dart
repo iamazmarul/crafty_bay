@@ -3,6 +3,8 @@ import 'package:crafty_bay/presentation/state_holders/auth/create_profile_screen
 import 'package:crafty_bay/presentation/state_holders/auth/email_verification_screen_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/auth/otp_verification_screen_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/auth/read_profile_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/brand_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/brand_product_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/cart_screen_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/category_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/category_product_list_controller.dart';
@@ -30,12 +32,14 @@ class StateHolderBinder extends Bindings
     Get.put(EmailVerificationScreenController());
     Get.put(HomeSlidersController());
     Get.put(CategoryController());
+    Get.put(BrandController());
     Get.put(PopularProductController());
     Get.put(SpecialProductController());
     Get.put(NewProductController());
     Get.put(ProductDetailsScreenController());
     Get.put(AddToCartController());
     Get.put(CategoryProductListController());
+    Get.put(BrandProductListController());
     Get.put(CartScreenController());
     Get.put(CreateProfileScreenController());
     Get.put(ReadProfileController());

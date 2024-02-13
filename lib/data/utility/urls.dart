@@ -11,6 +11,7 @@ class Urls {
   static String getHomeSliders = '$_baseUrl/ListProductSlider';
 
   static String getCategories = '$_baseUrl/CategoryList';
+  static String getBrands = '$_baseUrl/BrandList';
   static String getPopularProducts = '$_baseUrl/ListProductByRemark/popular';
   static String getSpecialProducts = '$_baseUrl/ListProductByRemark/special';
   static String getNewProducts = '$_baseUrl/ListProductByRemark/new';
@@ -27,6 +28,9 @@ class Urls {
 
   static String getProductListByCategory(int categoryId) =>
       '$_baseUrl/ListProductByCategory/$categoryId';
+
+  static String getProductListByBrand(int brandId) =>
+      '$_baseUrl/ListProductByBrand/$brandId';
 
   static String deleteCartProduct(int productId) =>
       '$_baseUrl/DeleteCartList/$productId';

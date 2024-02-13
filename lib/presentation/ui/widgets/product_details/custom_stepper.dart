@@ -41,7 +41,7 @@ class _CustomStepperState extends State<CustomStepper> {
               child: const Icon(
                 Icons.remove,
                 color: Colors.white,
-                size: 18,
+                size: 16,
               ),
             ),
             onTap: () {
@@ -56,8 +56,10 @@ class _CustomStepperState extends State<CustomStepper> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               '${widget.value}',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              style: const TextStyle(
                     color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold
                   ),
               textAlign: TextAlign.center,
             ),
@@ -72,7 +74,7 @@ class _CustomStepperState extends State<CustomStepper> {
               child: const Icon(
                 Icons.add,
                 color: Colors.white,
-                size: 18,
+                size: 16,
               ),
             ),
             onTap: () {

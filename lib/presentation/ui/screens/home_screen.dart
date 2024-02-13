@@ -1,11 +1,15 @@
+import 'package:crafty_bay/presentation/state_holders/brand_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/category_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/home_slider_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_screen_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/new_product_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/popular_product_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/special_product_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/brand_list_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/brand_product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/screens/category_product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_list_screen.dart';
+import 'package:crafty_bay/presentation/ui/widgets/brand_card.dart';
 import 'package:crafty_bay/presentation/ui/widgets/category_card.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/home_slider.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/home_screen_appbar_title.dart';
@@ -104,6 +108,53 @@ class HomeScreen extends StatelessWidget {
                   ],
                 );
               }),
+        const SizedBox(
+          height: 16,),
+              GetBuilder<BrandController>(builder: (brandController) {
+                if (brandController.getBrandInProgress) {
+                  return const SizedBox(
+                    height: 90,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    SectionHeader(
+                      title: 'Top Brands',
+                      onTap: () {
+                        Get.to(() => const BrandListScreen(
+                        ));
+                      },
+                    ),
+                    SizedBox(
+                      height: 90,
+                      child: ListView.builder(
+                          itemCount:
+                          brandController.brandModel.data?.length ??
+                              0,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(() => BrandProductListScreen(
+                                    brandId: index + 1,
+                                    remarkName: brandController.brandModel
+                                        .data![index].brandName ??
+                                        ''));
+                              },
+                              child: BrandCard(
+                                brandData: brandController
+                                    .brandModel.data![index],
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                );
+              }),
+
               const SizedBox(
                 height: 16,
               ),
